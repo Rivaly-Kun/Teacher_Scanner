@@ -122,5 +122,3 @@
   ```bash
   cordova requirements
   ```
-
-Let me know if you need help with any specific step!

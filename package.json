@@ -24,9 +24,7 @@
       "android"
     ],
     "plugins": {
-      "cordova-plugin-camera": {
-        "ANDROIDX_CORE_VERSION": "1.6.+"
-      },
+      "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-permissions": {}

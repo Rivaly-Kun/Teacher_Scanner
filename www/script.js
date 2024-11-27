@@ -1,5 +1,5 @@
-const supabaseUrl = 'https://rlyjpcyhcmgksxldjayl.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJseWpwY3loY21na3N4bGRqYXlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEyNjEwMjUsImV4cCI6MjA0NjgzNzAyNX0.LfZ55ZSRoipd3s7fNqUqPrD77nhjDsnLN9_tFJ0K2Zg';
+const supabaseUrl = 'https://oyjytztjoxmxxelrqzfs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95anl0enRqb3hteHhlbHJxemZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxNzI3MzgsImV4cCI6MjA0Nzc0ODczOH0.pM2b5_8UMdWnWrWXykYdYggEyJrOlv-3T_x8Ls_lQCw';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 let html5QrcodeScanner = null;
@@ -8,6 +8,7 @@ const startScanBtn = document.getElementById('start-scan');
 const stopScanBtn = document.getElementById('stop-scan');
 const resultDiv = document.getElementById('result');
 const eventSelect = document.getElementById('event-select');
+const refresh = document.getElementById('refresh');
 
 const qrConfig = {
     fps: 30,
@@ -15,8 +16,17 @@ const qrConfig = {
     aspectRatio: 1.0
 };
 
-async function loadEvents() {
+function onRefreshClick() {
+    loadEvents();
+  }
+ 
+  refresh.addEventListener('click', onRefreshClick);
+
+  async function loadEvents() {
     try {
+        // Clear the event select dropdown before adding new options
+        eventSelect.innerHTML = '';
+
         const { data: events, error } = await supabaseClient
             .from('events')
             .select('*')
@@ -25,6 +35,7 @@ async function loadEvents() {
 
         if (error) throw error;
 
+        // Populate the event select dropdown with new events
         events.forEach(event => {
             const option = document.createElement('option');
             option.value = event.id;
@@ -33,14 +44,17 @@ async function loadEvents() {
             eventSelect.appendChild(option);
         });
 
+        // Enable or disable the scan button based on event selection
         eventSelect.addEventListener('change', () => {
             startScanBtn.disabled = !eventSelect.value;
         });
     } catch (err) {
-        showError('Error loading events. Please refresh the page.');
+        showError('Error loading events. Please refresh the app.');
+        loadEvents();
         console.error('Error loading events:', err);
     }
 }
+
 
 function onScanSuccess(decodedText) {
     stopScanner();

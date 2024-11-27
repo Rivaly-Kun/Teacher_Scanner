@@ -115,6 +115,14 @@
                 background-color: var(--error-color);
                 color: white;
             }
+            #refresh {
+                background-color: #166534;
+                color: white;
+            }
+            #refresh:hover {
+                background-color: #20bd5c;
+                color: white;
+            }
     
             #stop-scan:hover:not(:disabled) {
                 background-color: #dc2626;
